@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seat Ninja - 건국대 도서관 예약</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+        .primary { background-color: #007bff; color: white; }
+        .danger { background-color: #dc3545; color: white; }
+        input {
+            padding: 10px;
+            margin: 5px;
+            width: 200px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Seat Ninja - 건국대 도서관 예약</h1>
+
+    <p>로그인 정보를 입력하세요:</p>
+    <input type="text" id="userId" placeholder="아이디 입력">
+    <input type="password" id="userPw" placeholder="비밀번호 입력">
+    <br>
+    <button class="primary" onclick="saveLoginInfo()">✅ 로그인</button>
+
+    <hr>
+
+    <p>원하는 예약 방식을 선택하세요:</p>
+    <button class="primary" onclick="startSeatNinja(1)">1️⃣ 특정 좌석 예약</button>
+    <button class="primary" onclick="startSeatNinja(2)">2️⃣ 빈자리 탐색 모드</button>
+    <button class="danger" onclick="stopLoop()">🛑 예약 중지</button>
+
+    <hr>
+
+    <h2>👤 내 정보</h2>
+    <div id="userInfo">
+        <p><strong>이름:</strong> <span id="userName">-</span></p>
+        <p><strong>학번:</strong> <span id="userStudentId">-</span></p>
+        <p><strong>현재 예약 좌석:</strong> <span id="userSeat">-</span></p>
+    </div>
+
+    <button class="danger" onclick="cancelReservation()">🛑 배석 취소</button>
+    <p id="status">⚡ 대기 중...</p>
+
+    <script src="script.js"></script>
+</body>
+</html>
