@@ -77,69 +77,7 @@ async function startSeatNinja(mode) {
     await reserveSeat(seatNumber);
 }
 
-// ✅ 3. 좌석 예약 함수
-async function reserveSeat(seatId = null) {
-    if (!USER_TOKEN) {
-        document.getElementById("status").innerText = "❌ 로그인 정보가 없습니다!";
-        return;
-    }
 
-    try {
-        let url = seatId ? 
-            `https://library.konkuk.ac.kr/pyxis-api/1/api/seat-charges` :
-            `https://library.konkuk.ac.kr/pyxis-api/1/api/rooms/${ROOM_ID}/seats`;
-
-        let method = seatId ? "POST" : "GET";
-
-        let response = await fetch(url, {
-            method: method,
-            headers: { 
-                "Content-Type": "application/json;charset=UTF-8",
-                "pyxis-auth-token": USER_TOKEN
-            },
-            body: seatId ? JSON.stringify({ seatId: seatId, smufMethodCode: "MOBILE" }) : null
-        });
-
-        let data = await response.json();
-
-        if (seatId) {
-            if (data.success) {
-                document.getElementById("status").innerText = `✅ 좌석 ${seatId} 예약 성공!`;
-                await confirmSeat(data.data.id);
-            } else {
-                document.getElementById("status").innerText = `❌ 예약 실패: ${data.message}`;
-            }
-        } else {
-            let availableSeats = data.data.list.filter(seat => !seat.isOccupied);
-
-            if (availableSeats.length === 0) {
-                document.getElementById("status").innerText = "🔄 빈자리 없음, 다시 탐색 중...";
-                await new Promise(resolve => setTimeout(resolve, 10000));
-                return reserveSeat();
-            }
-
-            let targetSeat = availableSeats[0];
-            document.getElementById("status").innerText = `🎯 빈자리 발견! 좌석 ${targetSeat.id} 예약 시도...`;
-
-            await reserveSeat(targetSeat.id);
-        }
-    } catch (error) {
-        document.getElementById("status").innerText = "❌ 오류 발생!";
-    }
-}
-
-// ✅ 4. 배석 확정
-async function confirmSeat(reservationId) {
-    await fetch(`https://library.konkuk.ac.kr/pyxis-api/1/api/seat-charges/${reservationId}?smufMethodCode=MOBILE&_method=put`, {
-        method: "POST",
-        headers: { 
-            "Content-Type": "application/json;charset=UTF-8",
-            "pyxis-auth-token": USER_TOKEN
-        }
-    });
-
-    document.getElementById("status").innerText = "✅ 배석 확정 완료!";
-}
 
 // 🛑 실행 중지
 function stopLoop() {
